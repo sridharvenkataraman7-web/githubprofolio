@@ -1,36 +1,60 @@
-import { useEffect, useRef } from "react";
-import * as THREE from "three";
+// src/App.jsx
+import React, { useState, useCallback } from 'react'
+import SceneCanvas from './components/SceneCanvas'
+import UIOverlay from './components/UIOverlay'
 
+/**
+ * App.jsx
+ * - Manages panel state (Skills / Projects / Hobbies)
+ * - Manages tooltip state
+ * - Renders the 3D scene + UI overlay
+ */
 export default function App() {
-  const mountRef = useRef(null);
+  // panel can be: null | 'skills' | 'projects' | 'hobbies'
+  const [panel, setPanel] = useState(null)
 
-  useEffect(() => {
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+  const [tooltip, setTooltip] = useState({
+    visible: false,
+    x: 0,
+    y: 0,
+    text: ''
+  })
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
+  // Open modal panel
+  const openPanel = useCallback(name => {
+    setPanel(name)
+  }, [])
 
-    mountRef.current.appendChild(renderer.domElement);
+  // Close modal panel
+  const closePanel = useCallback(() => {
+    setPanel(null)
+  }, [])
 
-    const cube = new THREE.Mesh(
-      new THREE.BoxGeometry(),
-      new THREE.MeshBasicMaterial({ color: "yellow" })
-    );
-    scene.add(cube);
+  // Tooltip handlers
+  const showTooltip = useCallback(tip => {
+    setTooltip(tip)
+  }, [])
 
-    camera.position.z = 5;
+  const hideTooltip = useCallback(() => {
+    setTooltip({
+      visible: false,
+      x: 0,
+      y: 0,
+      text: ''
+    })
+  }, [])
 
-    function animate() {
-      cube.rotation.x += 0.01;
-      cube.rotation.y += 0.01;
-      renderer.render(scene, camera);
-      requestAnimationFrame(animate);
-    }
+  return (
+    <div className="app-root">
+      {/* 3D Scene */}
+      <SceneCanvas
+        onOpenPanel={openPanel}
+        onShowTooltip={showTooltip}
+        onHideTooltip={hideTooltip}
+      />
 
-    animate();
-  }, []);
-
-  return <div ref={mountRef} />;
+      {/* UI Overlay */}
+      <UIOverlay panel={panel} onClose={closePanel} tooltip={tooltip} />
+    </div>
+  )
 }
-

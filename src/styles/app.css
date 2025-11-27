@@ -1,0 +1,132 @@
+/* Global Reset */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: "Inter", system-ui, Arial, sans-serif;
+  background: #0f0f0f;
+  color: #ffffff;
+}
+
+/* App Container */
+.app-root {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 3D Scene Container */
+.canvas-container {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ---------------------------
+   MODAL STYLING
+--------------------------- */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.modal-panel {
+  background: #14161a;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  width: min(600px, 92%);
+  padding: 20px;
+  outline: none;
+  color: #ffffff;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-title {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
+  transition: 0.15s ease;
+}
+
+.modal-close:hover {
+  color: #ffbb66;
+}
+
+.modal-body {
+  margin-top: 16px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* ---------------------------
+   TOOLTIP
+--------------------------- */
+
+.tooltip {
+  position: fixed;
+  z-index: 100;
+  background: rgba(20, 20, 20, 0.9);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  border: 1px solid rgba(255,255,255,0.15);
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.55);
+}
+
+/* ---------------------------
+   UI Overlay Wrapper
+--------------------------- */
+
+.ui-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none; /* allows 3D scene clicks */
+}
+
+.ui-overlay > * {
+  pointer-events: auto; /* re-enable inside modals */
+}
+
+/* ---------------------------
+   RESPONSIVE RULES
+--------------------------- */
+
+@media (max-width: 600px) {
+  .modal-title {
+    font-size: 20px;
+  }
+
+  .modal-panel {
+    padding: 14px;
+  }
+
+  .modal-body {
+    font-size: 15px;
+  }
+}

@@ -1,10 +1,20 @@
-import { StrictMode } from 'react'
+// src/main.jsx
+import React from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import App from './App'
+import './styles/app.css'
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
+/**
+ * Entry point for Vite + React app.
+ * Attaches React to #root in index.html.
+ */
+
+const rootElement = document.getElementById('root')
+const root = createRoot(rootElement)
+
+root.render(
+  <React.StrictMode>
     <App />
-  </StrictMode>,
+  </React.StrictMode>
 )
+
