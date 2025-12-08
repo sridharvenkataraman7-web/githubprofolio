@@ -1,4 +1,4 @@
-// FULL CODE — Lamp Click Opens SKILLS Panel
+// FULL CODE — Lamp Click Opens SKILLS Panel + JBL Click Opens SPOTIFY Panel
 
 import React, { useEffect, useRef } from 'react'
 import * as THREE from 'three'
@@ -31,12 +31,7 @@ export default function SceneCanvas({ onOpenPanel, onShowTooltip, onHideTooltip 
     const scene = new THREE.Scene()
     scene.background = new THREE.Color(0x131418)
 
-    const camera = new THREE.PerspectiveCamera(
-      60,
-      container.clientWidth / container.clientHeight,
-      0.05,
-      1000
-    )
+    const camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.05, 1000)
     camera.position.set(0, 2.5, 6)
 
     // -----------------------------
@@ -50,7 +45,8 @@ export default function SceneCanvas({ onOpenPanel, onShowTooltip, onHideTooltip 
     // Lights
     // -----------------------------
     scene.add(new THREE.AmbientLight(0x202020, 0.6))
-    const hemi = new THREE.HemisphereLight(0xffffff, 0x222233, 0.35)
+
+    const hemi = new THREE.HemisphereLight(0xffffff, 0x222233, 0.50)
     hemi.position.set(0, 20, 0)
     scene.add(hemi)
 
@@ -85,7 +81,8 @@ export default function SceneCanvas({ onOpenPanel, onShowTooltip, onHideTooltip 
       lampClickable: null,
       stickyBoard: null,
       hollowKnight: null,
-      lampLight: null
+      lampLight: null,
+      jbl: null,          // ⭐ NEW — JBL Speaker
     }
 
     // -----------------------------
@@ -121,12 +118,15 @@ export default function SceneCanvas({ onOpenPanel, onShowTooltip, onHideTooltip 
         }
       })
 
+      // Assign scene objects
       targets.laptop = getObjectByNameSafe(root, 'LaptopScreen')
       targets.lamp = getObjectByNameSafe(root, 'Lamp')
       targets.lampClickable = getObjectByNameSafe(root, 'LampClickable')
       targets.stickyBoard = getObjectByNameSafe(root, 'StickyBoard')
       targets.hollowKnight = getObjectByNameSafe(root, 'HollowKnight')
+      targets.jbl = getObjectByNameSafe(root, 'JBL')  // ⭐ JBL SPEAKER
 
+      // Laptop screen texture
       if (targets.laptop?.material) {
         const m = Array.isArray(targets.laptop.material)
           ? targets.laptop.material[0]
@@ -135,9 +135,10 @@ export default function SceneCanvas({ onOpenPanel, onShowTooltip, onHideTooltip 
         m.needsUpdate = true
       }
 
+      // Lamp Light
       if (targets.lamp) {
         const lampLight = new THREE.PointLight(0xffe6b3, 0, 8)
-        lampLight.position.set(0, 0.25, 0)
+        lampLight.position.set(12, 7, 6)
         lampLight.castShadow = true
         targets.lamp.add(lampLight)
         targets.lampLight = lampLight
@@ -176,7 +177,7 @@ export default function SceneCanvas({ onOpenPanel, onShowTooltip, onHideTooltip 
     }
 
     // -----------------------------
-    // CLICK HANDLER — Lamp → Skills
+    // CLICK HANDLER (PointerDown)
     // -----------------------------
     function onPointerDown(e) {
       updatePointer(e)
@@ -184,6 +185,12 @@ export default function SceneCanvas({ onOpenPanel, onShowTooltip, onHideTooltip 
       const hits = raycaster.intersectObjects(scene.children, true)
       if (hits.length === 0) return
       const hit = hits[0].object
+
+      // ⭐⭐⭐ JBL → SPOTIFY PANEL ⭐⭐⭐
+      if (targets.jbl && (hit === targets.jbl || targets.jbl.children.includes(hit))) {
+        onOpenPanel && onOpenPanel('spotify')
+        return
+      }
 
       // ⭐⭐⭐ LAMP → SKILLS PANEL ⭐⭐⭐
       if (
@@ -214,7 +221,7 @@ export default function SceneCanvas({ onOpenPanel, onShowTooltip, onHideTooltip 
     }
 
     // -----------------------------
-    // Pointer Move Handler
+    // Pointer Move (Hover)
     // -----------------------------
     function onPointerMove(e) {
       updatePointer(e)
@@ -287,7 +294,6 @@ export default function SceneCanvas({ onOpenPanel, onShowTooltip, onHideTooltip 
         targets.lamp.scale.setScalar(hoverState.lampScale)
       }
 
-      // **Final lamp light intensity update**
       if (targets.lampLight) {
         targets.lampLight.intensity = hoverState.lampLightIntensity
       }
