@@ -1,0 +1,60 @@
+.main-menu {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle, rgba(0,0,0,0.85), rgba(0,0,0,0.95));
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  animation: fadeIn 1s ease forwards;
+}
+
+.title {
+  font-size: 72px;
+  color: #ffffff;
+  letter-spacing: 6px;
+  text-shadow: 0 0 25px #4d7cff, 0 0 45px #4d7cff;
+  margin-bottom: 40px;
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.menu-btn {
+  font-size: 32px;
+  padding: 14px 55px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #4d7cff;
+  color: white;
+  transition: 0.25s ease;
+  text-shadow: 0 0 8px black;
+}
+
+.menu-btn:hover {
+  transform: scale(1.08);
+  background: #6f95ff;
+}
+
+.menu-btn.exit {
+  background: #ff4b4b;
+}
+
+.menu-btn.exit:hover {
+  background: #ff6e6e;
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; pointer-events: none; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
